@@ -28,7 +28,7 @@ resource "aws_cloudfront_cache_policy" "this" {
     enable_accept_encoding_gzip   = true
     enable_accept_encoding_brotli = true
     cookies_config {
-      cookie_behavior = "all"
+      cookie_behavior = var.cf_max_ttl == 0 ? "none" : "all"
     }
     headers_config {
       header_behavior = "none"
