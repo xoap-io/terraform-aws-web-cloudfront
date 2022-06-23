@@ -28,7 +28,7 @@ resource "aws_cloudfront_cache_policy" "this" {
     enable_accept_encoding_gzip   = true
     enable_accept_encoding_brotli = true
     cookies_config {
-      cookie_behavior = "none"
+      cookie_behavior = "all"
     }
     headers_config {
       header_behavior = "none"
@@ -37,6 +37,18 @@ resource "aws_cloudfront_cache_policy" "this" {
       query_string_behavior = "none"
     }
 
+  }
+}
+resource "aws_cloudfront_origin_request_policy" "this" {
+  name = module.this_label.id
+  cookies_config {
+    cookie_behavior = "all"
+  }
+  headers_config {
+    header_behavior = "none"
+  }
+  query_strings_config {
+    query_string_behavior = "all"
   }
 }
 #tfsec:ignore:AWS045
@@ -65,13 +77,16 @@ resource "aws_cloudfront_distribution" "this" {
   default_root_object = var.default_root_object
   aliases             = var.cloudfront_aliases
   default_cache_behavior {
-    allowed_methods        = var.allowed_methods
-    cached_methods         = var.cached_methods
-    target_origin_id       = var.s3_origin_id
-    compress               = true
-    cache_policy_id        = aws_cloudfront_cache_policy.this.id
-    viewer_protocol_policy = var.viewer_protocol_policy
-    min_ttl                = var.cf_min_ttl
+    allowed_methods          = var.allowed_methods
+    cached_methods           = var.cached_methods
+    target_origin_id         = var.s3_origin_id
+    compress                 = true
+    cache_policy_id          = aws_cloudfront_cache_policy.this.id
+    origin_request_policy_id = aws_cloudfront_origin_request_policy.this.id
+    viewer_protocol_policy   = var.viewer_protocol_policy
+    min_ttl                  = var.cf_min_ttl
+    max_ttl                  = var.cf_max_ttl
+    default_ttl              = var.cf_default_ttl
   }
   price_class = var.cf_price_class
   viewer_certificate {
