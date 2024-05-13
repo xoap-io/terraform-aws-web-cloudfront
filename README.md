@@ -117,7 +117,7 @@ Please be aware that this is mainly a copy operation which means all your curren
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_bucket"></a> [bucket](#module\_bucket) | git::github.com/xoap-io/terraform-aws-storage-s3.git | v0.1.0 |
+| <a name="module_bucket"></a> [bucket](#module\_bucket) | git::github.com/xoap-io/terraform-aws-storage-s3.git | v0.1.1 |
 | <a name="module_this_label"></a> [this\_label](#module\_this\_label) | git::github.com/xoap-io/terraform-aws-misc-label | v0.1.0 |
 
 ## Resources
@@ -127,6 +127,7 @@ Please be aware that this is mainly a copy operation which means all your curren
 | [aws_cloudfront_cache_policy.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_cache_policy) | resource |
 | [aws_cloudfront_distribution.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_distribution) | resource |
 | [aws_cloudfront_origin_request_policy.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_origin_request_policy) | resource |
+| [aws_cloudfront_response_headers_policy.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_response_headers_policy) | resource |
 
 ## Inputs
 
