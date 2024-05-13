@@ -1,10 +1,10 @@
 module "this_label" {
-  source     = "git::github.com/xoap-io/terraform-aws-misc-label?ref=v0.1.0"
+  source     = "git::github.com/xoap-io/terraform-aws-misc-label?ref=v0.1.1"
   context    = var.context
   attributes = ["hosting", var.site_name]
 }
 module "bucket" {
-  source                = "git::github.com/xoap-io/terraform-aws-storage-s3.git?ref=v0.1.1"
+  source                = "git::github.com/xoap-io/terraform-aws-storage-s3.git?ref=v0.1.2"
   context               = var.context
   name                  = var.site_name
   website_enabled       = true
