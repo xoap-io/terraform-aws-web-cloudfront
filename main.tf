@@ -4,7 +4,7 @@ module "this_label" {
   attributes = ["hosting", var.site_name]
 }
 module "bucket" {
-  source                = "git::github.com/xoap-io/terraform-aws-storage-s3.git?ref=v0.1.0"
+  source                = "git::github.com/xoap-io/terraform-aws-storage-s3.git?ref=v0.1.1"
   context               = var.context
   name                  = var.site_name
   website_enabled       = true
@@ -49,6 +49,29 @@ resource "aws_cloudfront_origin_request_policy" "this" {
   }
   query_strings_config {
     query_string_behavior = "all"
+
+  }
+
+}
+resource "aws_cloudfront_response_headers_policy" "this" {
+  name = module.this_label.id
+
+  cors_config {
+    access_control_allow_credentials = false
+
+    access_control_allow_headers {
+      items = var.cors_allowed_headers
+    }
+
+    access_control_allow_methods {
+      items = concat(var.cors_allowed_methods, ["OPTIONS"])
+    }
+
+    access_control_allow_origins {
+      items = var.cors_allowed_origins
+    }
+
+    origin_override = true
   }
 }
 #tfsec:ignore:AWS045
@@ -77,16 +100,14 @@ resource "aws_cloudfront_distribution" "this" {
   default_root_object = var.default_root_object
   aliases             = var.cloudfront_aliases
   default_cache_behavior {
-    allowed_methods          = var.allowed_methods
-    cached_methods           = var.cached_methods
-    target_origin_id         = var.s3_origin_id
-    compress                 = true
-    cache_policy_id          = aws_cloudfront_cache_policy.this.id
-    origin_request_policy_id = aws_cloudfront_origin_request_policy.this.id
-    viewer_protocol_policy   = var.viewer_protocol_policy
-    min_ttl                  = var.cf_min_ttl
-    max_ttl                  = var.cf_max_ttl
-    default_ttl              = var.cf_default_ttl
+    allowed_methods            = var.allowed_methods
+    cached_methods             = var.cached_methods
+    target_origin_id           = var.s3_origin_id
+    compress                   = true
+    cache_policy_id            = aws_cloudfront_cache_policy.this.id
+    origin_request_policy_id   = aws_cloudfront_origin_request_policy.this.id
+    viewer_protocol_policy     = var.viewer_protocol_policy
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.this.id
   }
   price_class = var.cf_price_class
   viewer_certificate {
